@@ -3,30 +3,19 @@ import sys
 import codecs
 import pandas
 
-w = [1] * 18
-x_item = list()
-y_item = [0] * 240
-# read process and split the data into x_vector
-for i in range(8,11):
-	col = pandas.read_csv(r"test.csv", header=-1, usecols=[i]).values.tolist()
-	for j in range(0, len(col), 18):
-		if 'NR' == ''.join(col[j+10]):
-			col[j + 10].clear()
-			col[j + 10].append('0')
-		x_item.append(col[j : j + 9] + col[j + 10: j + 18])
-		
-# start testing x_vector to get y_vector
-data_len = len(x_item)
-for i in range(0,data_len):
-	# add bias
-	inner_product = w[17]
-	for j in range(0,17):
-		inner_product += w[j] * float(x_item[i][j][0])
-	y_item[i%240] += inner_product
-	
-
-with open('output.csv', 'w', encoding='utf-8') as f:
+w = [-0.016325495048894263, -0.02870183148689336, 0.21896919137679158, -0.2325277127606827, -0.05766452480800722, 0.5376408752242116, -0.5709474904959306, -0.001878858022979187, 1.1118700277274205, 0.4654965052872306]
+index = 0
+# read process and get all PM2.5 data
+with open(sys.argv[2], 'w', encoding='utf-8') as f:
 	spamwriter = csv.writer(f, delimiter=',')
 	spamwriter.writerow(['id', 'value'])
-	for i in range(0, 240):
-		spamwriter.writerow(['id_'+str(i), y_item[i]/3])
+	data = pandas.read_csv(sys.argv[1]).values.tolist()
+	# start testing x_vector to get y
+	for i in range(8, len(data), 18):
+		# add bias
+		inner_product = w[9]
+		# do inner product
+		for j in range(0,9):
+			inner_product += w[j] * float(data[i][j + 2])
+		spamwriter.writerow(['id_'+str(index), inner_product])
+		index += 1
