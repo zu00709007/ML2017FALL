@@ -52,14 +52,18 @@ y_item = numpy.array(y_item)
 training_time = 10000
 learning_rate = 10
 w = [0] * len(x_item[0])
+w = numpy.array(w)
 x_item_t = x_item.transpose()
 s_gra = numpy.zeros(len(x_item[0]))
 
 for i in range(training_time):
 	hypo = numpy.dot(x_item, w)
+	""""""""""""""""""""""""""""""""""""
+	hypo = 1 / (math.exp(-1*hypo)+1)
+	""""""""""""""""""""""""""""""""""""
 	loss = hypo - y_item
-	cost = numpy.sum(loss**2) / len(x_item)
-	print(math.sqrt(cost))
+	#cost = numpy.sum(loss**2) / len(x_item)
+	#print(math.sqrt(cost))
 	gra = numpy.dot(x_item_t,loss)
 	s_gra += gra**2
 	ada = numpy.sqrt(s_gra)
