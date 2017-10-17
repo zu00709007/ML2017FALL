@@ -7,10 +7,10 @@ import pandas
 
 # use [feature] to select what you want from train data
 # features below use this type
-# 'age':0, 'fnlwgt':0, 'education_num':0, 'capital_gain':0, 'capital_loss':0, 'hours_per_week':0
-dic = {}
+# 'age':0, 'fnlwgt':0, 'education_num':0, 'sex':0, 'capital_gain':0, 'capital_loss':0, 'hours_per_week':0
+dic = {'age':0, 'education_num':0, 'sex':0, 'hours_per_week':0}
 # other features choosen by number
-feature = [3]
+feature = [1, 3, 5, 6, 7, 8, 13]
 row_name = pandas.read_csv("train.csv", sep=',' , header = -1, nrows = 1).values.tolist()
 row_name = row_name[0]
 # start select features
@@ -19,7 +19,6 @@ for i in range(0, len(feature)):
 	for j in range(0, len(item)):
 		if item[j][0] == " ?":
 			dic['?_'+row_name[feature[i]]] = '0'
-			break
 		else:
 			dic[item[j][0]] = '0'
 
@@ -36,8 +35,9 @@ for i in row_name:
 		x_name.append(i)
 		y_item.append(item)
 print(x_name)		
+row_name = len(y_item[0])
 # append data into x_item and y_item
-for i in range(0, len(y_item[0])):
+for i in range(0, row_name):
 	tmp = []
 	for j in range(0, len(y_item)):
 		tmp += y_item[j][i]
@@ -47,25 +47,21 @@ y_item = []
 y_item = pandas.read_csv("Y_train.csv", sep=',').values.tolist()
 x_item = numpy.array(x_item)
 y_item = numpy.array(y_item)
-
 # start training
-training_time = 10000
-learning_rate = 10
-w = [0] * len(x_item[0])
-w = numpy.array(w)
+training_time = 11111
+learning_rate = 1e-7
+w = [0.008647079395093956, 0.10097795706221586, 0.015845848704611365, 0.1592790543084495, -0.2649544583234235, -0.0029048988760926554, -0.3372502219841011, 0.19413948498424302, -0.4990992197837312, -0.24989026640639317, -0.013472671342253184, -0.41365544676779664, -0.44107617932343973, -0.4778083414452599, -0.17335010421638525, -0.1462509170793554, -0.26110061831460907, -0.49153893472159926, -0.3390717162522024, -0.06706496394686795, -0.07213349525625355, 0.43068741666972227, 0.4236821999058612, -0.6167322710029257, 0.6196232339681312, -0.04442960328058847, 0.5365949891232393, -0.30783933901854416, -0.42802216353972383, 0.021224218086723513, 0.685126108132854, -0.12962997807266458, -1.132589980765464, -0.2618106532700675, -0.1821061947627685, -0.1898793894293874, -0.004619637330500118, -0.16769866210977113, 0.7626647867123207, -0.4938447478066481, -0.4568426966203679, -0.44934083132107694, -0.8062121728444642, -0.06601720706513275, 0.6187691357783471, 0.0767558102707053, 0.19389288789857018, 0.21083383245903217, -0.23970940713884198, -0.4165603456438857, 0.2829586390623768, -0.3080900936669621, -0.3151908171655715, -0.9487600571079904, -0.6403252866182879, 0.5015989713053427, -0.14589407478444438, -0.275121581345482, -0.47860990562992745, -0.16256088804376453, -0.36562219438747867, 0.005541668102579893, 0.0013671408086768542, -0.049922039126352076, -0.04666750980654189, -0.016954637491619826, -0.05054753204031993, -0.015250971052879187, -0.05090364575398135, 0.006572493345487725, 0.008399551189128397, 0.002672443776089578, -0.01723611328674982, -0.03112371487452704, -0.01956285475131975, -0.000290261583095389, -0.005160857690260328, -0.00978714303594732, -0.003322106701825288, -0.0335642979068321, -0.0012785848117699873, -0.0004631578802057554, -0.0009387660515976474, -0.026643620876336448, 0.00419116613812016, -0.013939900474222439, -0.42330409916677214, -0.023659068969621274, -0.012739294064224794, -0.01653928559392122, -0.01730327577798622, -0.021358160323424795, -0.027062235692700682, -0.06438992164265046, -0.0014998804540991657, -0.048993768771949206, -0.011035061554030633, -0.010737893775049035, -0.010840234797974649, -0.16739204183084255, -0.04587194372576133, -0.00018869507995373857, -0.16008053113383322, -1.4278086441911175]
+w = numpy.array(w)[numpy.newaxis]
+w = w.transpose()
 x_item_t = x_item.transpose()
-s_gra = numpy.zeros(len(x_item[0]))
 
-for i in range(training_time):
-	hypo = numpy.dot(x_item, w)
-	""""""""""""""""""""""""""""""""""""
-	hypo = 1 / (math.exp(-1*hypo)+1)
-	""""""""""""""""""""""""""""""""""""
-	loss = hypo - y_item
-	#cost = numpy.sum(loss**2) / len(x_item)
-	#print(math.sqrt(cost))
-	gra = numpy.dot(x_item_t,loss)
-	s_gra += gra**2
-	ada = numpy.sqrt(s_gra)
-	w = w - learning_rate * gra/ada
-	
+for i in range(0, training_time):
+	inner = numpy.dot(x_item, w)
+	inner = 1 / (numpy.exp(-1 * inner)+1)
+	# use cross entropy to find loss
+	#loss = -1 * (y_item * numpy.log(inner) + (1 - y_item) * numpy.log(1 - inner))
+	#print(numpy.sum(loss))
+	inner = inner - y_item
+	inner = numpy.dot(x_item_t, inner)
+	w = w - learning_rate * inner
+print(w.transpose().tolist()[0])
