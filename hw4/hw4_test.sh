@@ -1,0 +1,1 @@
+python3 hw4.py test $1 $2
