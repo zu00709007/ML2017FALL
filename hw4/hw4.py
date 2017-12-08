@@ -52,7 +52,7 @@ if args.action=='train':
 	dm.add_data('train_data',args.first,True)
 	dm.add_data('semi_data',args.second,False)
 	dm.tokenize(vocab_size)
-	dm.save_tokenizer(os.path.join(save_path,'token.pk'))
+	dm.save_tokenizer(os.path.join(save_path,'token.pk%0D'))
 	dm.to_sequence(max_length)
 	print('start supervised learning')
 	(X,Y),(X_val,Y_val)=dm.split_data('train_data',validation)
@@ -83,7 +83,7 @@ if args.action=='train':
 
 elif args.action=='test':
 	dm.add_test_data('test_data',args.first)
-	dm.load_tokenizer(os.path.join(load_path,'token.pk'))
+	dm.load_tokenizer(os.path.join(load_path,'token.pk%0D'))
 	dm.to_sequence(max_length)
 	model.load_weights(os.path.join(load_path,'model.h5'))
 	print('start predict')
