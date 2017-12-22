@@ -70,7 +70,7 @@ if sys.argv[1] == "test":
 	users = input_data['UserID'].values - 1
 	movies = input_data['MovieID'].values - 1
 	model.load_weights('normal_model')
-	output = model.predict([users, movies])
+	output = model.predict([users, movies], verbose = 1)
 	with open(sys.argv[3], 'w', encoding='utf-8') as f:
 		spamwriter = csv.writer(f, delimiter=',')
 		spamwriter.writerow(['TestDataID', 'Rating'])

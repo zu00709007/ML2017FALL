@@ -24,19 +24,20 @@ keras.backend.tensorflow_backend.set_session(tensorflow.Session(config=tensorflo
 #users = input_data['UserID'].values - 1
 #movies = input_data['MovieID'].values - 1
 #ratings = input_data['Rating'].values
-input_data = pandas.read_csv(sys.argv[5], delimiter = '::', encoding = 'utf-8', usecols = ['UserID', 'Gender', 'Age'], engine = 'python')
-input_data = input_data.sort_values(by = ['UserID']).values
-gender = []
-age = []
-for i in users:
-	if input_data[i][1] == 'M':
-		gender.append(1)
-	else:
-		gender.append(0)
-	age.append(input_data[i][2] // 5)
-gender = numpy.array(gender)
-age = numpy.array(age)
-max_age = numpy.amax(age) + 1
+#input_data = pandas.read_csv(sys.argv[5], delimiter = '::', encoding = 'utf-8', usecols = ['UserID', 'Gender', 'Age'], engine = 'python')
+#input_data = input_data.sort_values(by = ['UserID']).values
+#gender = []
+#age = []
+#for i in users:
+#	if input_data[i][1] == 'M':
+#		gender.append(1)
+#	else:
+#		gender.append(0)
+#	age.append(input_data[i][2] // 5)
+#gender = numpy.array(gender)
+#age = numpy.array(age)
+#max_age = numpy.amax(age) + 1
+max_age = 12
 max_user = 6040
 max_movie = 3952
 	
