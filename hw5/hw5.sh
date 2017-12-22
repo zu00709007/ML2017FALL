@@ -1,0 +1,1 @@
+python3 hw5.py test $1 $2

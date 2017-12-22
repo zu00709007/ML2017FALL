@@ -1,0 +1,1 @@
+python3 hw5_best.py test $1 $2 $3 $4
