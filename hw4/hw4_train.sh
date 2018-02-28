@@ -1,1 +1,0 @@
-python3 hw4.py train $1 $2
